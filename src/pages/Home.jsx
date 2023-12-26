@@ -68,9 +68,13 @@ function Home() {
                         id="reciters"
                         name="reciters"
                         showSearch
-                        style={{ width: '100%', display: 'block', color:'#000' }}
+                        style={{ width: '100%', display: 'block', color: '#000' }}
                         placeholder="اختر القارئ"
                         onChange={getMoshafs}
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
                     >
                         {reciters && reciters.map((reciter, index) => (
                             <Option value={reciter.id} key={index}>{reciter.name}</Option>
@@ -85,7 +89,10 @@ function Home() {
                         style={{ width: '100%', display: 'block' }}
                         placeholder="اختر الرواية"
                         onChange={getSuwar}
-
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
                     >
                         {moshafs && moshafs.map((moshaf, index) => (
                             <Option
@@ -108,7 +115,10 @@ function Home() {
                         style={{ width: '100%', display: 'block' }}
                         placeholder="اختر السورة"
                         onChange={handleSurahPlay}
-
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
                     >
                         {suwar && suwar.map((surah, index) => (
                             <Option value={selectedServer + String(surah.id).padStart(3, '0') + '.mp3 '} key={index}>{surah.name}</Option>
