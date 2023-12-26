@@ -11,6 +11,8 @@ function Home() {
     const [selectedServer, setSelectedServer] = useState();
     const [surahToPlay, setSurahToPlay] = useState();
     const [channelUrl, setChannelUrl] = useState('https://win.holol.com/live/quran/playlist.m3u8');
+    const [btnQuran,setBtnQuran] = useState('btn btn-dark m-2');
+    const [btnSunna,setBtnSunna] = useState('btn btn-outline-dark m-2');
 
     const { Option } = Select;
 
@@ -51,6 +53,17 @@ function Home() {
         if (audioElement) {
             audioElement.load();
             audioElement.play();
+        }
+    }
+
+    const btnHandleClick = (url,btn) => {
+        setChannelUrl(url)
+        if(btn == 'quran'){
+            setBtnQuran('btn btn-dark m-2')
+            setBtnSunna('btn btn-outline-dark m-2')
+        }else{
+            setBtnQuran('btn btn-outline-dark m-2')
+            setBtnSunna('btn btn-dark m-2')
         }
     }
 
@@ -140,17 +153,17 @@ function Home() {
             <div className='video-control text-center pb-5'>
                 <h3>اختر قناة البث</h3>
                 <div className='mb-2'>
-                    <button className='btn btn-dark m-2' onClick={() => setChannelUrl('https://win.holol.com/live/quran/playlist.m3u8')}>
+                    <button className={btnQuran} onClick={() => btnHandleClick('https://win.holol.com/live/quran/playlist.m3u8','quran')}>
                         قناة القرآن
                     </button>
-                    <button className='btn btn-outline-dark m-2' onClick={() => setChannelUrl('https://win.holol.com/live/sunnah/playlist.m3u8')}>
+                    <button className={btnSunna} onClick={() => btnHandleClick('https://win.holol.com/live/sunnah/playlist.m3u8','sunna')}>
                         قناة السنة
                     </button>
                 </div>
                 <ReactHlsPlayer
                     src={channelUrl}
                     hlsConfig={{
-                        maxLoadingDelay: 4,
+                        maxLoadingDelay: 6,
                         minAutoBitrate: 2,
                         lowLatencyMode: true,
                     }}

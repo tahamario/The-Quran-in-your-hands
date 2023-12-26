@@ -20,7 +20,7 @@ export default function Navbar() {
                             <Link className="nav-link" to="/">القرآن الكريم مسموع</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/"> تصفح القرآن </Link>
+                            <Link className="nav-link" to="/quran"> تصفح القرآن </Link>
                         </li>
                     </ul>
                 </div>

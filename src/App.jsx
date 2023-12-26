@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import axios from 'axios'
 import Footer from './components/Footer'
+import Quran from './pages/Quran'
 
 axios.defaults.baseURL = 'https://mp3quran.net/api/v3';
 function App() {
@@ -13,9 +14,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/projects' element={<Home />} />
-          <Route path='/project/:id' element={<Home />} />
-          <Route path='/experiences' element={<Home />} />
+          <Route path='/quran' element={<Quran />} />
         </Routes>
         <Footer />
       </BrowserRouter>
