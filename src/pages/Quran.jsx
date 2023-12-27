@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Select } from 'antd';
 import axios from 'axios';
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import '../styles/Quran.css'
 
 function Quran() {
   const [suwar, setSuwar] = useState([]);
   const [surahSvg, setSurahSvg] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(1);
   const { Option } = Select;
 
   const getSuwar = async () => {
@@ -18,7 +20,6 @@ function Quran() {
   }
 
   const getSurah = async (surahLink) => {
-    setCurrentIndex(1)
     let data = [];
     await axios.get(surahLink)
       .then(res => data = res.data)
@@ -31,19 +32,14 @@ function Quran() {
     const uniqueLinksSet = new Set(svgLinks);
     const uniqueLinksArray = Array.from(uniqueLinksSet);
     setSurahSvg(uniqueLinksArray);
+    swiperRef.current.slideTo(0); //reset the Swiper index
   }
 
-  const goToNextSvg = () => {
-    if (surahSvg.length > currentIndex + 1) {
-      setCurrentIndex((prevIndex) => (prevIndex + 1));
-    }
 
-  };
+  const swiperRef = useRef(null);
 
-  const goToPrevSvg = () => {
-    if (1 < currentIndex) {
-      setCurrentIndex((prevIndex) => (prevIndex - 1));
-    }
+  const handleSwiperInit = (swiper) => {
+    swiperRef.current = swiper;
   };
 
   useEffect(() => {
@@ -75,17 +71,28 @@ function Quran() {
         </div>
       </div>
 
-      {surahSvg.length > 1 &&
-        <div className='row mb-3'>
-          <div className='col-12 text-center'>
-            <img src={surahSvg[currentIndex]} alt={`Image ${currentIndex}`} width='100%' height={450} />
-            <div className='text-center'>
-              <button className='btn btn-outline-dark m-3' onClick={goToPrevSvg}>السابق</button>
-              <button className='btn btn-outline-dark m-3' onClick={goToNextSvg}>التالي</button>
-            </div>
+      <div className='row mb-3'>
+        <Swiper
+          className="col-12 text-center"
+          onSwiper={handleSwiperInit}
+        >
+          {
+            surahSvg.map((surah, index) => (
+              <SwiperSlide key={index}>
+                <img src={surah ? surah : 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/%D8%A7%D9%84%D9%82%D8%B1%D8%A7%D9%86_%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D9%85_-_%D8%B4%D8%B9%D8%A7%D8%B1_%D8%A7%D9%84%D9%82%D8%B1%D8%A2%D9%86_%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D9%85_-_%D9%84%D9%88%D8%BA%D9%88_%D8%A7%D9%84%D9%82%D8%B1%D8%A2%D9%86_%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D9%85_-_logo_quran.svg/512px-%D8%A7%D9%84%D9%82%D8%B1%D8%A7%D9%86_%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D9%85_-_%D8%B4%D8%B9%D8%A7%D8%B1_%D8%A7%D9%84%D9%82%D8%B1%D8%A2%D9%86_%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D9%85_-_%D9%84%D9%88%D8%BA%D9%88_%D8%A7%D9%84%D9%82%D8%B1%D8%A2%D9%86_%D8%A7%D9%84%D9%83%D8%B1%D9%8A%D9%85_-_logo_quran.svg.png'} alt={`Image ${index}`} width='100%' height={400} />
+              </SwiperSlide>
+            ))
+          }
+          <div className='text-center mt-2'>
+            <button onClick={() => swiperRef.current.slideNext()} className="btn btn-outline-dark m-3">
+              Next
+            </button>
+            <button onClick={() => swiperRef.current.slidePrev()} className="btn btn-outline-dark m-3">
+              Prev
+            </button>
           </div>
-        </div>
-      }
+        </Swiper>
+      </div>
     </div>
   )
 }
