@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import ReactHlsPlayer from 'react-hls-player';
+import React, {useEffect, useState} from "react";
 import '../styles/Home.css'
 import axios from 'axios';
 import { Select } from 'antd';
+import HlsPlayer from "./HlsPlayer";
 
 function Home() {
     const [reciters, setReciters] = useState();
@@ -67,6 +67,8 @@ function Home() {
         }
     }
 
+    
+
     useEffect(() => {
         getReciters()
     }, [])
@@ -76,105 +78,145 @@ function Home() {
         <div className='container'>
             <div className='row mb-3'>
                 <div className='col-lg-4'>
-                    <label htmlFor="reciters" className='form-label'>اختر القارئ</label>
+                    <label htmlFor='reciters' className='form-label'>
+                        اختر القارئ
+                    </label>
                     <Select
-                        id="reciters"
-                        name="reciters"
+                        id='reciters'
+                        name='reciters'
                         showSearch
-                        style={{ width: '100%', display: 'block', color: '#000' }}
-                        placeholder="اختر القارئ"
+                        style={{width: "100%", display: "block", color: "#000"}}
+                        placeholder='اختر القارئ'
                         onChange={getMoshafs}
-                        optionFilterProp="children"
+                        optionFilterProp='children'
                         filterOption={(input, option) =>
-                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            option.props.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
                         }
                     >
-                        {reciters && reciters.map((reciter, index) => (
-                            <Option value={reciter.id} key={index}>{reciter.name}</Option>
-                        ))}
+                        {reciters &&
+                            reciters.map((reciter, index) => (
+                                <Option value={reciter.id} key={index}>
+                                    {reciter.name}
+                                </Option>
+                            ))}
                     </Select>
                 </div>
 
                 <div className='col-lg-4'>
-                    <label htmlFor="moshafs" className='form-label'>اختر الرواية</label>
+                    <label htmlFor='moshafs' className='form-label'>
+                        اختر الرواية
+                    </label>
                     <Select
                         showSearch
-                        style={{ width: '100%', display: 'block' }}
-                        placeholder="اختر الرواية"
+                        style={{width: "100%", display: "block"}}
+                        placeholder='اختر الرواية'
                         onChange={getSuwar}
-                        optionFilterProp="children"
+                        optionFilterProp='children'
                         filterOption={(input, option) =>
-                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            option.props.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
                         }
                     >
-                        {moshafs && moshafs.map((moshaf, index) => (
-                            <Option
-                                value={moshaf.id}
-                                key={index}
-                                server={moshaf.server}
-                                surahlist={moshaf.surah_list} >
-                                {moshaf.name}
-                            </Option>
-                        ))}
+                        {moshafs &&
+                            moshafs.map((moshaf, index) => (
+                                <Option
+                                    value={moshaf.id}
+                                    key={index}
+                                    server={moshaf.server}
+                                    surahlist={moshaf.surah_list}
+                                >
+                                    {moshaf.name}
+                                </Option>
+                            ))}
                     </Select>
                 </div>
 
                 <div className='col-lg-4'>
-                    <label htmlFor="suwar" className="form-label">اختر السورة</label>
+                    <label htmlFor='suwar' className='form-label'>
+                        اختر السورة
+                    </label>
                     <Select
-                        id="suwar"
-                        name="suwar"
+                        id='suwar'
+                        name='suwar'
                         showSearch
-                        style={{ width: '100%', display: 'block' }}
-                        placeholder="اختر السورة"
+                        style={{width: "100%", display: "block"}}
+                        placeholder='اختر السورة'
                         onChange={handleSurahPlay}
-                        optionFilterProp="children"
+                        optionFilterProp='children'
                         filterOption={(input, option) =>
-                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            option.props.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
                         }
                     >
-                        {suwar && suwar.map((surah, index) => (
-                            <Option value={selectedServer + String(surah.id).padStart(3, '0') + '.mp3 '} key={index}>{surah.name}</Option>
-                        ))}
+                        {suwar &&
+                            suwar.map((surah, index) => (
+                                <Option
+                                    value={
+                                        selectedServer +
+                                        String(surah.id).padStart(3, "0") +
+                                        ".mp3 "
+                                    }
+                                    key={index}
+                                >
+                                    {surah.name}
+                                </Option>
+                            ))}
                     </Select>
                 </div>
             </div>
 
             <div className='row mb-3'>
                 <div className='col-12'>
-                    <audio id="audioPlayer" controls autoPlay muted style={{ width: '100%' }}>
-                        <source src={surahToPlay ? surahToPlay : ''} type="audio/mpeg" />
+                    <audio
+                        id='audioPlayer'
+                        controls
+                        autoPlay
+                        muted
+                        style={{width: "100%"}}
+                    >
+                        <source
+                            src={surahToPlay ? surahToPlay : ""}
+                            type='audio/mpeg'
+                        />
                         Your browser does not support the audio element.
                     </audio>
                 </div>
-
             </div>
 
             <div className='video-control text-center pb-5'>
                 <h3>اختر قناة البث</h3>
                 <div className='mb-2'>
-                    <button className={btnQuran} onClick={() => btnHandleClick('https://win.holol.com/live/quran/playlist.m3u8','quran')}>
+                    <button
+                        className={btnQuran}
+                        onClick={() =>
+                            btnHandleClick(
+                                "https://win.holol.com/live/quran/playlist.m3u8",
+                                "quran"
+                            )
+                        }
+                    >
                         قناة القرآن
                     </button>
-                    <button className={btnSunna} onClick={() => btnHandleClick('https://win.holol.com/live/sunnah/playlist.m3u8','sunna')}>
+                    <button
+                        className={btnSunna}
+                        onClick={() =>
+                            btnHandleClick(
+                                "https://win.holol.com/live/sunnah/playlist.m3u8",
+                                "sunna"
+                            )
+                        }
+                    >
                         قناة السنة
                     </button>
                 </div>
-                <ReactHlsPlayer
-                    src={channelUrl}
-                    hlsConfig={{
-                        maxLoadingDelay: 6,
-                        minAutoBitrate: 2,
-                        lowLatencyMode: true,
-                    }}
-                    autoPlay={false}
-                    controls={true}
-                    width="80%"
-                    height="50%"
-                />
+                <HlsPlayer channelUrl={channelUrl} />
             </div>
         </div>
-    )
+    );
 }
 
 export default Home
